@@ -35,7 +35,7 @@ function displayEntryData(theEntry) {
     });
     theEntry.getMetadata(function(data) {
       document.querySelector('#file_size').textContent = data.size;
-    });    
+    });
   }
   else {
     document.querySelector('#file_path').value = theEntry.fullPath;
@@ -75,7 +75,7 @@ function writeFileEntry(writableEntry, opt_blob, callback) {
         writer.seek(0);
         writer.write(opt_blob);
       });
-    } 
+    }
     else {
       chosenEntry.file(function(file) {
         writer.truncate(file.fileSize);
@@ -101,7 +101,7 @@ function waitForIO(writer, callback) {
       console.error("Write operation taking too long, aborting!"+
         " (current writer readyState is "+writer.readyState+")");
       writer.abort();
-    } 
+    }
     else {
       callback();
     }
@@ -137,9 +137,9 @@ function loadDirEntry(_chosenEntry) {
           textarea.value = entries.join("\n");
           saveFileButton.disabled = true; // don't allow saving of the list
           displayEntryData(chosenEntry);
-        } 
+        }
         else {
-          results.forEach(function(item) { 
+          results.forEach(function(item) {
             entries = entries.concat(item.fullPath);
           });
           readEntries();
@@ -147,14 +147,14 @@ function loadDirEntry(_chosenEntry) {
       }, errorHandler);
     };
 
-    readEntries(); // Start reading dirs.    
+    readEntries(); // Start reading dirs.
   }
 }
 
 function loadInitialFile(launchData) {
   if (launchData && launchData.items && launchData.items[0]) {
     loadFileEntry(launchData.items[0].entry);
-  } 
+  }
   else {
     // see if the app retained access to an earlier file or directory
     chrome.storage.local.get('chosenFile', function(items) {
@@ -180,6 +180,7 @@ chooseFileButton.addEventListener('click', function(e) {
     extensions: ['js', 'css', 'txt', 'html', 'xml', 'tsv', 'csv', 'rtf']
   }];
   chrome.fileSystem.chooseEntry({type: 'openFile', accepts: accepts}, function(theEntry) {
+    console.log('open: ' + theEntry.fullPath);
     if (!theEntry) {
       output.textContent = 'No file selected.';
       return;
@@ -192,6 +193,7 @@ chooseFileButton.addEventListener('click', function(e) {
 
 chooseDirButton.addEventListener('click', function(e) {
   chrome.fileSystem.chooseEntry({type: 'openDirectory'}, function(theEntry) {
+    console.log('open: ' + theEntry.fullPath);
     if (!theEntry) {
       output.textContent = 'No Directory selected.';
       return;
@@ -205,6 +207,7 @@ chooseDirButton.addEventListener('click', function(e) {
 saveFileButton.addEventListener('click', function(e) {
   var config = {type: 'saveFile', suggestedName: chosenEntry.name};
   chrome.fileSystem.chooseEntry(config, function(writableEntry) {
+    console.log('save: ' + writableEntry.fullPath);
     var blob = new Blob([textarea.value], {type: 'text/plain'});
     writeFileEntry(writableEntry, blob, function(e) {
       output.textContent = 'Write complete :)';
@@ -228,7 +231,7 @@ var dnd = new DnDFileController('body', function(data) {
   if (!chosenEntry) {
     output.textContent = "Sorry. That's not a text file.";
     return;
-  } 
+  }
   else {
     output.textContent = "";
   }
