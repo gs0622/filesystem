@@ -140,6 +140,7 @@ function loadDirEntry(_chosenEntry) {
         }
         else {
           results.forEach(function(item) {
+            console.log('open file: ' + item.fullPath);
             entries = entries.concat(item.fullPath);
           });
           readEntries();
@@ -180,7 +181,7 @@ chooseFileButton.addEventListener('click', function(e) {
     extensions: ['js', 'css', 'txt', 'html', 'xml', 'tsv', 'csv', 'rtf']
   }];
   chrome.fileSystem.chooseEntry({type: 'openFile', accepts: accepts}, function(theEntry) {
-    console.log('open: ' + theEntry.fullPath);
+    console.log('open file: ' + theEntry.fullPath);
     if (!theEntry) {
       output.textContent = 'No file selected.';
       return;
@@ -193,7 +194,7 @@ chooseFileButton.addEventListener('click', function(e) {
 
 chooseDirButton.addEventListener('click', function(e) {
   chrome.fileSystem.chooseEntry({type: 'openDirectory'}, function(theEntry) {
-    console.log('open: ' + theEntry.fullPath);
+    console.log('open dir: ' + theEntry.fullPath);
     if (!theEntry) {
       output.textContent = 'No Directory selected.';
       return;
