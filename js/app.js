@@ -140,7 +140,8 @@ function loadDirEntry(_chosenEntry) {
         }
         else {
           results.forEach(function(item) {
-            console.log('open file: ' + item.fullPath);
+            console.log('open fullpath: ' + item.fullPath + ' name: ' +
+              item.name);
             entries = entries.concat(item.fullPath);
           });
           readEntries();
